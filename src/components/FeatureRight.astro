@@ -1,0 +1,46 @@
+---
+interface Props {
+  imageSrc?: string
+  imageAlt?: string
+}
+
+const {
+  imageSrc = '/images/cliente.png',
+  imageAlt = 'Peças feitas à mão'
+} = Astro.props
+
+const items = [
+  { title: 'Feito à mão', desc: 'Cada ponto é feito com cuidado e atenção aos detalhes.' },
+  { title: 'Peça única', desc: 'Nenhum item é igual ao outro — cada um tem sua alma.' },
+  { title: 'Presente com sentido', desc: 'Ideal para quem quer presentear com amor e originalidade.' },
+  { title: 'Tradição viva', desc: 'Valorizamos a arte do crochê e a história que ele carrega.' },
+]
+---
+
+<section id="artesanato" class="flex flex-col md:flex-row">
+  <div class="w-full md:w-1/2 order-2 md:order-1">
+    <img
+      src={imageSrc}
+      alt={imageAlt}
+      class="w-full h-[50vh] md:h-screen object-cover"
+    />
+  </div>
+
+  <div class="w-full md:w-1/2 bg-bege p-10 md:p-16 flex flex-col justify-center min-h-[50vh] md:min-h-screen order-1 md:order-2">
+    <h2 class="text-3xl md:text-4xl font-bold text-marrom-escuro leading-tight mb-8">
+      Feito à mão para transformar<br/>carinho em lembrança.
+    </h2>
+    <ul class="space-y-5 mb-10">
+      {items.map((item) => (
+        <li class="flex items-start gap-3">
+          <span class="mt-1.5 w-2 h-2 rounded-full bg-marrom-escuro shrink-0" />
+          <div>
+            <span class="text-marrom-escuro font-semibold">{item.title}</span>
+            <span class="text-marrom-escuro/70"> — {item.desc}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <hr class="border-marrom-escuro/20" />
+  </div>
+</section>

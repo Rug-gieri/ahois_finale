@@ -1,0 +1,46 @@
+---
+interface Props {
+  imageSrc?: string
+  imageAlt?: string
+}
+
+const {
+  imageSrc = '/images/aboutimage.jpg',
+  imageAlt = 'Materiais de alta qualidade'
+} = Astro.props
+
+const items = [
+  { title: 'Algodão 100%', desc: 'Chega de plástico. Nossos fios são naturais e macios.' },
+  { title: 'Peças com firmeza', desc: 'Pontos firmes e acabamento impecável que duram.' },
+  { title: 'Cores que resistem', desc: 'Tingimento de alta qualidade que não desbote.' },
+  { title: 'Enchimento seguro', desc: 'Materiais hipoalergênicos para toda a família.' },
+]
+---
+
+<section id="materiais" class="flex flex-col md:flex-row">
+  <div class="w-full md:w-1/2 bg-marrom-escuro p-10 md:p-16 flex flex-col justify-center min-h-[50vh] md:min-h-screen">
+    <h2 class="text-3xl md:text-4xl font-bold text-bege leading-tight mb-8">
+      Materiais de alta qualidade,<br/>toque humano.
+    </h2>
+    <ul class="space-y-5 mb-10">
+      {items.map((item) => (
+        <li class="flex items-start gap-3">
+          <span class="mt-1.5 w-2 h-2 rounded-full bg-bege shrink-0" />
+          <div>
+            <span class="text-bege font-semibold">{item.title}</span>
+            <span class="text-bege/70"> — {item.desc}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <hr class="border-bege/20" />
+  </div>
+
+  <div class="w-full md:w-1/2">
+    <img
+      src={imageSrc}
+      alt={imageAlt}
+      class="w-full h-[50vh] md:h-screen object-cover"
+    />
+  </div>
+</section>

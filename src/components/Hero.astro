@@ -1,0 +1,62 @@
+---
+import BotaoEncomenda from "./BotaoEncomenda.svelte";
+---
+
+<style>
+    @keyframes bounce {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(8px);
+        }
+    }
+    .scroll-indicator {
+        animation: bounce 2s infinite;
+    }
+</style>
+
+<section class="min-h-screen relative flex flex-col md:flex-row">
+    <div class="w-full md:w-1/2 order-1 md:order-1 pl-6 md:pl-12">
+        <img
+            src="/images/hero_logo.png"
+            alt="Ateliê Ahois — Crochê feito com carinho"
+            class="w-full h-[50vh] md:h-screen object-contain"
+        />
+    </div>
+
+    <div
+        class="w-full md:w-1/2 flex items-center justify-center bg-branco p-8 md:p-16 order-2 md:order-2"
+    >
+        <div class="w-full">
+            <img
+                src="/images/hero_text_logo.png"
+                alt="Logo Ateliê Ahois"
+                class="w-full md:w-[180%] mx-auto mb-2"
+            />
+            <div class="flex justify-center mt-10 md:justify-end mr-2">
+                <img
+                    src="/images/buttom.png"
+                    alt="Encomende agora"
+                    class="h-[5.25rem] md:h-[3rem] object-contain cursor-pointer"
+                />
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 scroll-indicator">
+    <svg
+        class="w-6 h-6 text-marrom-claro"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+    >
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+    </svg>
+</div>
