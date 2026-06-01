@@ -20,3 +20,18 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+*:focus-visible {
+  outline: 2px solid #7f4222;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background-color: #ffd3ae;
+  color: #351803;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}

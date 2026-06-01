@@ -19,21 +19,20 @@ const items = [
 
 <section id="materiais" class="flex flex-col md:flex-row">
   <div class="w-full md:w-1/2 bg-marrom-escuro p-10 md:p-16 flex flex-col justify-center min-h-[50vh] md:min-h-screen">
-    <h2 class="text-3xl md:text-4xl font-bold text-bege leading-tight mb-8">
+    <h2 class="text-4xl md:text-5xl font-bold text-bege leading-tight mb-10">
       Materiais de alta qualidade,<br/>toque humano.
     </h2>
-    <ul class="space-y-5 mb-10">
+    <ul class="space-y-6">
       {items.map((item) => (
-        <li class="flex items-start gap-3">
-          <span class="mt-1.5 w-2 h-2 rounded-full bg-bege shrink-0" />
+        <li class="flex items-start gap-4 group">
+          <span class="mt-2 w-3 h-3 rounded-full bg-bege shrink-0 transition-all duration-300 group-hover:scale-150 group-hover:bg-white" />
           <div>
-            <span class="text-bege font-semibold">{item.title}</span>
-            <span class="text-bege/70"> — {item.desc}</span>
+            <span class="text-bege text-xl font-bold">{item.title}</span>
+            <span class="text-bege/80 text-lg"> — {item.desc}</span>
           </div>
         </li>
       ))}
     </ul>
-    <hr class="border-bege/20" />
   </div>
 
   <div class="w-full md:w-1/2">

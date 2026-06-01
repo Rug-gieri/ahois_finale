@@ -4,6 +4,10 @@ import NavBar from '../components/NavBar.svelte'
 import Hero from '../components/Hero.astro'
 import FeatureLeft from '../components/FeatureLeft.astro'
 import FeatureRight from '../components/FeatureRight.astro'
+import Catalogo from '../components/Catalogo.svelte'
+import CartDrawer from '../components/CartDrawer.svelte'
+import Agenda from '../components/Agenda.astro'
+import SobreArtesa from '../components/SobreArtesa.astro'
 import Footer from '../components/Footer.astro'
 ---
 
@@ -13,6 +17,10 @@ import Footer from '../components/Footer.astro'
     <Hero />
     <FeatureLeft />
     <FeatureRight />
+    <Catalogo client:load />
+    <Agenda />
+    <SobreArtesa />
     <Footer />
   </main>
+  <CartDrawer client:load />
 </Layout>
