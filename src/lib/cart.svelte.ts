@@ -50,6 +50,8 @@ class CartStore {
       "",
       `Total: ${total}`,
       "",
+      "Chave Pix: ",
+      "",
       "Obrigado!",
     ].join("%0A")
     return message

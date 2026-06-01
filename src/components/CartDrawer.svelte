@@ -9,7 +9,7 @@
   let aviso = $state('')
   let timeoutAviso = $state(null)
 
-  const PHONE = '5500000000000'
+  const PHONE = '556992366937'
 
   function mostrarAviso(msg) {
     aviso = msg

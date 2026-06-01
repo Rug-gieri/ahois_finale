@@ -52,7 +52,11 @@
     <a href="#artesanato" onclick={closeMenu} class="text-bege/70 text-2xl font-medium tracking-wide hover:text-white transition-colors">
       Artesanato
     </a>
-    <a href="https://wa.me/5500000000000" target="_blank" rel="noopener noreferrer"
+    <a href="https://www.instagram.com/atelieahois_?igsh=MXNkdzJxaWx6OWli" target="_blank" rel="noopener noreferrer"
+       class="text-bege/70 text-2xl font-medium tracking-wide hover:text-white transition-colors">
+      Instagram
+    </a>
+    <a href="#catalogo"
        class="bg-bege text-marrom-escuro text-lg font-semibold px-10 py-3.5 rounded-full hover:bg-white transition-all duration-300 active:scale-95 mt-2"
        onclick={closeMenu}>
       Encomendar
@@ -80,7 +84,11 @@
       <a href="#artesanato" class="text-bege/70 text-sm font-medium tracking-wide hover:text-white transition-colors">
         Artesanato
       </a>
-      <a href="https://wa.me/5500000000000" target="_blank" rel="noopener noreferrer"
+      <a href="https://www.instagram.com/atelieahois_?igsh=MXNkdzJxaWx6OWli" target="_blank" rel="noopener noreferrer"
+         class="text-bege/70 text-sm font-medium tracking-wide hover:text-white transition-colors">
+        Instagram
+      </a>
+      <a href="#catalogo"
          class="bg-bege text-marrom-escuro text-sm font-semibold px-4 py-1.5 rounded-full hover:bg-white transition-colors">
         Encomendar
       </a>

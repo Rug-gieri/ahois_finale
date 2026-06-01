@@ -22,7 +22,7 @@
   })
 </script>
 
-<section class="max-w-7xl mx-auto px-4 py-16 md:py-24">
+<section id="catalogo" class="max-w-7xl mx-auto px-4 py-16 md:py-24">
   <h2 class="text-3xl md:text-4xl font-bold text-marrom-escuro text-center mb-8">
     Catálogo
   </h2>
