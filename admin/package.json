@@ -1,22 +1,11 @@
 {
-  "name": "tanstack",
+  "name": "admin",
   "type": "module",
-  "version": "0.0.1",
   "private": true,
-  "workspaces": [
-    "admin"
-  ],
-  "engines": {
-    "node": ">=22.12.0"
-  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "dev:admin": "npm run dev -w admin",
-    "build:admin": "npm run build -w admin",
-    "preview:admin": "npm run preview -w admin",
-    "astro": "astro"
+    "preview": "astro preview"
   },
   "dependencies": {
     "@astrojs/svelte": "^8.1.2",
