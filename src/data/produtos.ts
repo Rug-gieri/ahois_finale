@@ -13,6 +13,7 @@ export interface Product {
   category: string
   emoji: string
   details: ProductDetails
+  image_url?: string
 }
 
 export const categorias = [
@@ -22,14 +23,15 @@ export const categorias = [
   "Acessórios",
 ] as const
 
-export const produtos: Product[] = [
+export const exemplares = [
   {
     id: 1,
     name: "Coelhinho Amigurumi",
-    description: "Coelhinho de crochê com aproximadamente 20cm. Perfeito para presentear.",
+    description: "Coelhinho de crochê com aproximadamente 20cm, perfeito para presentear.",
     price: 59.90,
     category: "Amigurumi",
     emoji: "🐰",
+    image_url: "/images/1.webp",
     details: {
       materiais: "Fio 100% algodão, enchimento hipoalergênico",
       tamanho: "~20cm de altura",
@@ -44,6 +46,7 @@ export const produtos: Product[] = [
     price: 69.90,
     category: "Amigurumi",
     emoji: "🧸",
+    image_url: "/images/2.webp",
     details: {
       materiais: "Fio 100% algodão, enchimento hipoalergênico",
       tamanho: "~25cm de altura",
@@ -58,6 +61,7 @@ export const produtos: Product[] = [
     price: 45.00,
     category: "Casa & Decoração",
     emoji: "🧺",
+    image_url: "/images/3.webp",
     details: {
       materiais: "Fio de algodão reciclado, reforço interno",
       tamanho: "~18cm diâmetro x 12cm altura",
@@ -68,10 +72,11 @@ export const produtos: Product[] = [
   {
     id: 4,
     name: "Manta de Sofá",
-    description: "Manta超大 de crochê para sofá, feita com fio 100% algodão.",
+    description: "Manta de crochê para sofá, feita com fio 100% algodão.",
     price: 129.90,
     category: "Casa & Decoração",
     emoji: "🛋️",
+    image_url: "/images/4.webp",
     details: {
       materiais: "Fio 100% algodão grosso",
       tamanho: "~150cm x 120cm",
@@ -86,6 +91,7 @@ export const produtos: Product[] = [
     price: 89.90,
     category: "Casa & Decoração",
     emoji: "🟤",
+    image_url: "/images/5.webp",
     details: {
       materiais: "Retalhos de tecido 100% algodão, base antiderrapante",
       tamanho: "~80cm x 50cm (personalizável)",
@@ -100,6 +106,7 @@ export const produtos: Product[] = [
     price: 79.90,
     category: "Baby",
     emoji: "👶",
+    image_url: "/images/6.jpg",
     details: {
       materiais: "Fio 100% algodão premium, enchimento macio",
       tamanho: "~75cm x 75cm",
@@ -114,6 +121,7 @@ export const produtos: Product[] = [
     price: 34.90,
     category: "Baby",
     emoji: "🧦",
+    image_url: "/images/7.jpg",
     details: {
       materiais: "Fio 100% algodão, solado antiderrapante",
       tamanho: "0-6 meses (~9cm)",
@@ -128,6 +136,7 @@ export const produtos: Product[] = [
     price: 49.90,
     category: "Acessórios",
     emoji: "🧣",
+    image_url: "/images/8.jpg",
     details: {
       materiais: "Fio 100% algodão, fechamento em botão forrado",
       tamanho: "Único (ajustável ~50-65cm)",
@@ -138,29 +147,16 @@ export const produtos: Product[] = [
   {
     id: 9,
     name: "Bolsa Cesta",
-    description: "Bolsa de crochê estilo cesta, alça em couro sintético. Ideal para o dia a dia.",
+    description: "Bolsa de crochê estilo cesta com alça em couro. Ideal para o dia a dia.",
     price: 74.90,
     category: "Acessórios",
     emoji: "👜",
+    image_url: "/images/9.jpg",
     details: {
       materiais: "Fio de algodão reciclado, alça em couro sintético, forro interno",
       tamanho: "~30cm largura x 25cm altura",
       cores: ["Bege natural", "Marrom", "Preto"],
       cuidados: "Limpar com pano úmido, evitar exposição prolongada ao sol",
-    },
-  },
-  {
-    id: 10,
-    name: "Turbante Crochê",
-    description: "Turbante artesanal de crochê com laço lateral. Confortável e estiloso.",
-    price: 39.90,
-    category: "Acessórios",
-    emoji: "🎀",
-    details: {
-      materiais: "Fio 100% algodão, elastano interno para ajuste",
-      tamanho: "Único (ajustável)",
-      cores: ["Bege", "Marrom", "Rosa", "Vinho"],
-      cuidados: "Lavar à mão, secar à sombra, passar com ferro morno",
     },
   },
 ]

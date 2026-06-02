@@ -13,9 +13,25 @@
   let form = $state(null)
   let editando = $state(null)
 
-  let fp = $state({ name: '', description: '', price: '', category: '', emoji: '🧶', materiais: '', tamanho: '', cores: '', cuidados: '' })
+  let fp = $state({ name: '', description: '', price: '', category: '', emoji: '🧶', image_url: '', materiais: '', tamanho: '', cores: '', cuidados: '', active: true })
   let fe = $state({ nome: '', tipo: 'oficina', logradouro: '', cidade: '', estado: '', cep: '', mapa_url: '' })
   let salvando = $state(false)
+  let enviandoFoto = $state(false)
+
+  function handleFoto(e) {
+    const file = e.target?.files?.[0]
+    if (!file || !supabase) return
+    enviandoFoto = true
+    const ext = file.name.split('.').pop()
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+    supabase.storage.from('produtos').upload(path, file).then(({ data, error }) => {
+      if (error) { alert('Erro ao enviar foto: ' + error.message); enviandoFoto = false; return }
+      const { data: pub } = supabase.storage.from('produtos').getPublicUrl(data.path)
+      fp.image_url = pub.publicUrl
+      enviandoFoto = false
+    })
+    e.target.value = ''
+  }
 
   onMount(async () => {
     await carregar()
@@ -25,15 +41,7 @@
     carregando = true
     erroDb = ''
     if (!supabase) {
-      produtos = [
-        { id: 1, emoji: '🧣', name: 'Cachecol Ahois', category: 'Inverno', price: 89.90 },
-        { id: 2, emoji: '🧶', name: 'Novelo Artesanal', category: 'Linhas', price: 34.50 },
-        { id: 3, emoji: '👜', name: 'Bolsa Crochê', category: 'Acessórios', price: 129.90 },
-      ]
-      enderecos = [
-        { id: 1, nome: 'Ateliê Principal', tipo: 'oficina', logradouro: 'Rua das Flores, 123', cidade: 'São Paulo', estado: 'SP' },
-        { id: 2, nome: 'Feira de Artesanato', tipo: 'evento', logradouro: 'Praça Central, s/n', cidade: 'São Paulo', estado: 'SP' },
-      ]
+      erroDb = 'Banco de dados não configurado.'
       carregando = false
       return
     }
@@ -53,7 +61,7 @@
   }
 
   function resetFormProduto() {
-    fp = { name: '', description: '', price: '', category: '', emoji: '🧶', materiais: '', tamanho: '', cores: '', cuidados: '' }
+    fp = { name: '', description: '', price: '', category: '', emoji: '🧶', image_url: '', materiais: '', tamanho: '', cores: '', cuidados: '', active: true }
   }
 
   function resetFormEndereco() {
@@ -74,10 +82,12 @@
       price: String(p.price),
       category: p.category,
       emoji: p.emoji,
+      image_url: p.image_url ?? '',
       materiais: p.details?.materiais ?? '',
       tamanho: p.details?.tamanho ?? '',
       cores: p.details?.cores?.join(', ') ?? '',
       cuidados: p.details?.cuidados ?? '',
+      active: p.active ?? true,
     }
     form = 'produto'
   }
@@ -90,12 +100,14 @@
       price: parseFloat(fp.price),
       category: fp.category,
       emoji: fp.emoji,
+      image_url: fp.image_url || null,
       details: {
         materiais: fp.materiais,
         tamanho: fp.tamanho,
         cores: fp.cores.split(',').map(c => c.trim()).filter(Boolean),
         cuidados: fp.cuidados,
       },
+      active: fp.active,
     }
     if (!supabase) {
       if (editando) {
@@ -245,7 +257,13 @@
       <p class="text-marrom-claro/50 text-center py-12">Carregando...</p>
 
     {:else if erroDb}
-      <p class="text-red-500 text-center py-12">{erroDb}</p>
+      <div class="text-center py-12 max-w-md mx-auto">
+        <div class="bg-bege/30 rounded-2xl p-6">
+          <span class="text-3xl block mb-2">🚧</span>
+          <p class="text-marrom-escuro font-semibold mb-1">Em desenvolvimento</p>
+          <p class="text-marrom-claro/60 text-sm">{erroDb}</p>
+        </div>
+      </div>
 
     {:else if aba === 'produtos'}
       <div class="flex justify-between items-center mb-4">
@@ -263,6 +281,27 @@
             <input bind:value={fp.category} placeholder="Categoria" required class="px-3 py-2 rounded-lg border border-bege bg-branco text-sm focus:outline-none focus:border-marrom-claro" />
             <input bind:value={fp.price} type="number" step="0.01" placeholder="Preço" required class="px-3 py-2 rounded-lg border border-bege bg-branco text-sm focus:outline-none focus:border-marrom-claro" />
             <input bind:value={fp.emoji} placeholder="Emoji" class="px-3 py-2 rounded-lg border border-bege bg-branco text-sm focus:outline-none focus:border-marrom-claro" />
+            <label class="flex items-center gap-2 px-3 py-2 rounded-lg border border-bege bg-branco text-sm cursor-pointer">
+              <input type="checkbox" bind:checked={fp.active} class="accent-marrom-escuro" />
+              Produto ativo
+            </label>
+            <div class="md:col-span-2">
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input type="file" accept="image/*" class="hidden" onchange={handleFoto} />
+                <span class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-bege bg-branco text-sm text-marrom-claro hover:bg-bege/30 transition-colors">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                  {enviandoFoto ? 'Enviando...' : 'Escolher foto'}
+                </span>
+              </label>
+            </div>
+            {#if enviandoFoto}
+              <div class="md:col-span-2 -mt-2 text-xs text-marrom-claro/60">Enviando foto...</div>
+            {/if}
+            {#if fp.image_url}
+              <div class="md:col-span-2 -mt-2">
+                <img src={fp.image_url} alt="preview" class="w-24 h-24 rounded-lg object-cover border border-bege" />
+              </div>
+            {/if}
             <div class="md:col-span-2">
               <textarea bind:value={fp.description} placeholder="Descrição" rows="2" class="w-full px-3 py-2 rounded-lg border border-bege bg-branco text-sm focus:outline-none focus:border-marrom-claro resize-none"></textarea>
             </div>
@@ -286,25 +325,35 @@
         <table class="w-full text-sm">
           <thead>
             <tr class="bg-bege/30 text-marrom-claro text-xs uppercase tracking-wide">
+              <th class="text-left px-4 py-3">Foto</th>
               <th class="text-left px-4 py-3">Produto</th>
               <th class="text-left px-4 py-3">Categoria</th>
               <th class="text-left px-4 py-3">Preço</th>
+              <th class="text-center px-4 py-3">Ativo</th>
               <th class="text-left px-4 py-3">Ações</th>
             </tr>
           </thead>
           <tbody>
             {#each produtos as p}
               <tr class="border-t border-bege/20 hover:bg-bege/10 transition-colors">
-                <td class="px-4 py-3">{p.emoji} {p.name}</td>
+                <td class="px-4 py-3">
+                  {#if p.image_url}
+                    <img src={p.image_url} alt="" class="w-10 h-10 rounded-lg object-cover" />
+                  {:else}
+                    <span class="text-2xl">{p.emoji}</span>
+                  {/if}
+                </td>
+                <td class="px-4 py-3 font-medium">{p.name}</td>
                 <td class="px-4 py-3 text-marrom-claro/70">{p.category}</td>
-                <td class="px-4 py-3 font-medium">R$ {Number(p.price).toFixed(2)}</td>
+                <td class="px-4 py-3">R$ {Number(p.price).toFixed(2)}</td>
+                <td class="px-4 py-3 text-center">{p.active ?? true ? '✅' : '❌'}</td>
                 <td class="px-4 py-3 flex gap-3">
                   <button onclick={() => editarProduto(p)} class="text-marrom-claro hover:text-marrom-escuro underline text-xs cursor-pointer">Editar</button>
                   <button onclick={() => excluirProduto(p.id)} class="text-red-500 hover:text-red-700 underline text-xs cursor-pointer">Excluir</button>
                 </td>
               </tr>
             {:else}
-              <tr><td colspan="4" class="text-center py-12 text-marrom-claro/50">Nenhum produto cadastrado.</td></tr>
+              <tr><td colspan="6" class="text-center py-12 text-marrom-claro/50">Nenhum produto cadastrado.</td></tr>
             {/each}
           </tbody>
         </table>

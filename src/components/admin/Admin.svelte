@@ -4,7 +4,6 @@
   import Dashboard from './Dashboard.svelte'
 
   let loggedIn = $state(false)
-  let demo = $state(false)
   let email = $state('')
   let password = $state('')
   let loading = $state(false)
@@ -44,11 +43,6 @@
   }
 
   async function logout() {
-    if (demo) {
-      demo = false
-      loggedIn = false
-      return
-    }
     const sb = getSupabase()
     if (!sb) return
     await sb.auth.signOut()
@@ -91,20 +85,8 @@
           {loading ? 'Entrando...' : 'Entrar'}
         </button>
       </form>
-
-      {#if !getSupabase()}
-        <div class="mt-6 pt-6 border-t border-bege/20">
-          <button
-            onclick={() => { demo = true; loggedIn = true }}
-            class="w-full bg-bege/20 text-bege font-semibold py-3 rounded-xl hover:bg-bege/30 transition-all duration-200 cursor-pointer"
-          >
-            Entrar em modo demonstração
-          </button>
-          <p class="text-bege/40 text-xs text-center mt-2">Sem persistência — dados não são salvos</p>
-        </div>
-      {/if}
     </div>
   </div>
 {:else}
-  <Dashboard {logout} {demo} />
+  <Dashboard {logout} />
 {/if}
