@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte'
   import { getSupabase } from '../lib/supabase'
-  import { produtos as fallback, categorias } from '../data/produtos'
+  import { categorias, exemplares } from '../data/produtos'
   import ProductCard from './ProductCard.svelte'
   import { cart } from '../lib/cart.svelte'
 
@@ -12,12 +12,17 @@
   onMount(async () => {
     const sb = getSupabase()
     if (!sb) {
-      produtos = fallback
+      produtos = exemplares
       carregando = false
       return
     }
-    const { data } = await sb.from('produtos').select('*').eq('active', true).order('id')
-    produtos = data && data.length > 0 ? data : fallback
+    try {
+      const { data, error: dbError } = await sb.from('produtos').select('*').eq('active', true).order('id')
+      if (dbError) throw dbError
+      produtos = data && data.length > 0 ? data : exemplares
+    } catch (err) {
+      produtos = exemplares
+    }
     carregando = false
   })
 </script>

@@ -1,9 +1,8 @@
 <script>
   import { onMount } from 'svelte'
   import { getSupabase } from '../../lib/supabase'
-  import { produtos as fallbackProdutos } from '../../data/produtos'
 
-  let { logout, demo = false } = $props()
+  let { logout } = $props()
 
   let aba = $state('produtos')
   let produtos = $state([])
@@ -14,27 +13,14 @@
   let form = $state(null)
   let editando = $state(null)
 
-  let fp = $state({ name: '', description: '', price: '', category: '', emoji: '🧶', image_url: '', materiais: '', tamanho: '', cores: '', cuidados: '' })
+  let fp = $state({ name: '', description: '', price: '', category: '', emoji: '🧶', image_url: '', materiais: '', tamanho: '', cores: '', cuidados: '', active: true })
   let fe = $state({ nome: '', tipo: 'oficina', logradouro: '', cidade: '', estado: '', cep: '', mapa_url: '' })
   let salvando = $state(false)
   let enviandoFoto = $state(false)
 
-  let nextId = $state(100)
-
-  function demoToast(msg) {
-    alert(msg)
-  }
-
   function handleFoto(e) {
     const file = e.target?.files?.[0]
     if (!file) return
-    if (demo) {
-      const reader = new FileReader()
-      reader.onload = () => { fp.image_url = String(reader.result) }
-      reader.readAsDataURL(file)
-      e.target.value = ''
-      return
-    }
     const sb = getSupabase()
     if (!sb) return
     enviandoFoto = true
@@ -52,18 +38,9 @@
   onMount(async () => { await carregar() })
 
   async function carregar() {
-    if (demo) {
-      produtos = fallbackProdutos.map((p, i) => ({ ...p, id: i + 1, active: true }))
-      enderecos = [
-        { id: 1, nome: 'Oficina Principal', tipo: 'oficina', logradouro: 'Rua das Flores, 123', cidade: 'São Paulo', estado: 'SP', cep: '01234-567', mapa_url: '' },
-        { id: 2, nome: 'Feira de Artesanato', tipo: 'evento', logradouro: 'Praça da Sé', cidade: 'São Paulo', estado: 'SP', cep: '', mapa_url: '' },
-      ]
-      carregando = false
-      return
-    }
     const sb = getSupabase()
     if (!sb) {
-      erroDb = 'Supabase não configurado.'
+      erroDb = 'Banco de dados não configurado.'
       carregando = false
       return
     }
@@ -85,7 +62,7 @@
   }
 
   function resetFp() {
-    fp = { name: '', description: '', price: '', category: '', emoji: '🧶', image_url: '', materiais: '', tamanho: '', cores: '', cuidados: '' }
+    fp = { name: '', description: '', price: '', category: '', emoji: '🧶', image_url: '', materiais: '', tamanho: '', cores: '', cuidados: '', active: true }
   }
 
   function novaProduto() { editando = null; resetFp(); form = 'produto' }
@@ -103,35 +80,12 @@
       tamanho: p.details?.tamanho ?? '',
       cores: p.details?.cores?.join(', ') ?? '',
       cuidados: p.details?.cuidados ?? '',
+      active: p.active ?? true,
     }
     form = 'produto'
   }
 
   async function salvarProduto() {
-    if (demo) {
-      const payload = {
-        name: fp.name,
-        description: fp.description || null,
-        price: parseFloat(fp.price),
-        category: fp.category,
-        emoji: fp.emoji,
-        image_url: fp.image_url || null,
-        details: {
-          materiais: fp.materiais,
-          tamanho: fp.tamanho,
-          cores: fp.cores.split(',').map(c => c.trim()).filter(Boolean),
-          cuidados: fp.cuidados,
-        },
-        active: true,
-      }
-      if (editando) {
-        produtos = produtos.map(p => p.id === editando.id ? { ...p, ...payload } : p)
-      } else {
-        produtos = [...produtos, { ...payload, id: nextId++ }]
-      }
-      form = null; editando = null
-      return
-    }
     const sb = getSupabase()
     if (!sb) return
     salvando = true
@@ -148,6 +102,7 @@
         cores: fp.cores.split(',').map(c => c.trim()).filter(Boolean),
         cuidados: fp.cuidados,
       },
+      active: fp.active,
     }
     try {
       const { error } = editando
@@ -164,10 +119,6 @@
 
   async function excluirProduto(id) {
     if (!confirm('Excluir este produto?')) return
-    if (demo) {
-      produtos = produtos.filter(p => p.id !== id)
-      return
-    }
     const sb = getSupabase()
     if (!sb) return
     try {
@@ -188,16 +139,6 @@
   }
 
   async function salvarEndereco() {
-    if (demo) {
-      const payload = { nome: fe.nome, tipo: fe.tipo, logradouro: fe.logradouro, cidade: fe.cidade, estado: fe.estado, cep: fe.cep || null, mapa_url: fe.mapa_url || null }
-      if (editando) {
-        enderecos = enderecos.map(e => e.id === editando.id ? { ...e, ...payload } : e)
-      } else {
-        enderecos = [...enderecos, { ...payload, id: nextId++ }]
-      }
-      form = null; editando = null
-      return
-    }
     const sb = getSupabase()
     if (!sb) return
     salvando = true
@@ -209,16 +150,14 @@
       if (error) throw error
       form = null; editando = null
       await carregar()
-    } catch (err) { alert(err.message || 'Erro ao salvar.') }
+    } catch (err) {
+      alert(err.message || 'Erro ao salvar.')
+    }
     salvando = false
   }
 
   async function excluirEndereco(id) {
     if (!confirm('Excluir este endereço?')) return
-    if (demo) {
-      enderecos = enderecos.filter(e => e.id !== id)
-      return
-    }
     const sb = getSupabase()
     if (!sb) return
     try {
@@ -229,13 +168,16 @@
   }
 </script>
 
-<div class="min-h-screen bg-branco flex flex-col">
+<div class="min-h-screen bg-branco flex flex-col relative">
+  <img
+    src="/images/footer_logo.png"
+    alt=""
+    aria-hidden="true"
+    class="pointer-events-none select-none fixed bottom-0 left-0 w-48 md:w-64 opacity-10 z-0"
+  />
   <header class="bg-marrom-escuro px-4 md:px-8 py-4 flex items-center justify-between sticky top-0 z-10">
     <div class="flex items-center gap-3">
       <h1 class="text-bege text-lg md:text-xl font-bold">Admin — Ateliê Ahois</h1>
-      {#if demo}
-        <span class="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">DEMO</span>
-      {/if}
     </div>
     <button onclick={logout} class="text-bege/60 hover:text-bege text-sm transition-colors cursor-pointer">Sair</button>
   </header>
@@ -251,12 +193,18 @@
     </div>
   </div>
 
-  <div class="flex-1 px-4 md:px-8 py-6">
+  <div class="flex-1 px-4 md:px-8 py-6 relative z-10">
     {#if carregando}
       <p class="text-marrom-claro/50 text-center py-12">Carregando...</p>
 
     {:else if erroDb}
-      <p class="text-red-500 text-center py-12">{erroDb}</p>
+      <div class="text-center py-12 max-w-md mx-auto">
+        <div class="bg-bege/30 rounded-2xl p-6">
+          <span class="text-3xl block mb-2">🚧</span>
+          <p class="text-marrom-escuro font-semibold mb-1">Em desenvolvimento</p>
+          <p class="text-marrom-claro/60 text-sm">{erroDb}</p>
+        </div>
+      </div>
 
     {:else if aba === 'produtos'}
       <div class="flex justify-between items-center mb-4">
@@ -274,6 +222,10 @@
             <input bind:value={fp.category} placeholder="Categoria" required class="px-3 py-2 rounded-lg border border-bege bg-branco text-sm focus:outline-none focus:border-marrom-claro" />
             <input bind:value={fp.price} type="number" step="0.01" placeholder="Preço" required class="px-3 py-2 rounded-lg border border-bege bg-branco text-sm focus:outline-none focus:border-marrom-claro" />
             <input bind:value={fp.emoji} placeholder="Emoji" class="px-3 py-2 rounded-lg border border-bege bg-branco text-sm focus:outline-none focus:border-marrom-claro" />
+            <label class="flex items-center gap-2 px-3 py-2 rounded-lg border border-bege bg-branco text-sm cursor-pointer">
+              <input type="checkbox" bind:checked={fp.active} class="accent-marrom-escuro" />
+              Produto ativo
+            </label>
             <div class="md:col-span-2">
               <label class="flex items-center gap-3 cursor-pointer">
                 <input type="file" accept="image/*" class="hidden" onchange={handleFoto} />
@@ -318,6 +270,7 @@
               <th class="text-left px-4 py-3">Produto</th>
               <th class="text-left px-4 py-3">Categoria</th>
               <th class="text-left px-4 py-3">Preço</th>
+              <th class="text-center px-4 py-3">Ativo</th>
               <th class="text-left px-4 py-3">Ações</th>
             </tr>
           </thead>
@@ -334,13 +287,14 @@
                 <td class="px-4 py-3 font-medium">{p.name}</td>
                 <td class="px-4 py-3 text-marrom-claro/70">{p.category}</td>
                 <td class="px-4 py-3">R$ {Number(p.price).toFixed(2)}</td>
+                <td class="px-4 py-3 text-center">{p.active ? '✅' : '❌'}</td>
                 <td class="px-4 py-3 flex gap-3">
                   <button onclick={() => editarProduto(p)} class="text-marrom-claro hover:text-marrom-escuro underline text-xs cursor-pointer">Editar</button>
                   <button onclick={() => excluirProduto(p.id)} class="text-red-500 hover:text-red-700 underline text-xs cursor-pointer">Excluir</button>
                 </td>
               </tr>
             {:else}
-              <tr><td colspan="5" class="text-center py-12 text-marrom-claro/50">Nenhum produto cadastrado.</td></tr>
+              <tr><td colspan="6" class="text-center py-12 text-marrom-claro/50">Nenhum produto cadastrado.</td></tr>
             {/each}
           </tbody>
         </table>
