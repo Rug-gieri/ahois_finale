@@ -9,7 +9,7 @@
   let aviso = $state('')
   let timeoutAviso = $state(null)
 
-  const PHONE = '556992366937'
+  const PHONE = '556981201606'
 
   function mostrarAviso(msg) {
     aviso = msg
@@ -82,7 +82,7 @@
 
 <!-- Floating WhatsApp button -->
 <a
-  href="https://wa.me/556992366937?text=Olá! Gostaria de saber mais sobre as peças do Ateliê Ahois."
+  href="https://wa.me/556981201606?text=Olá! Gostaria de saber mais sobre as peças do Ateliê Ahois."
   target="_blank"
   rel="noopener"
   class="fixed bottom-4 left-4 z-50 bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-xl transition-colors duration-200 animate-whatsapp-pulse"
