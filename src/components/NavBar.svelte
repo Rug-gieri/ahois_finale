@@ -1,102 +1,164 @@
 <script>
-  let visible = $state(false);
-  let menuOpen = $state(false);
-  let ticking = $state(false);
+  let visible = $state(false)
+  let menuOpen = $state(false)
+  let menuMounted = $state(false)
+  let ticking = $state(false)
+
+  const navLinks = [
+    { href: '#', label: 'Início' },
+    { href: '#materiais', label: 'Materiais' },
+    { href: '#artesanato', label: 'Artesanato' },
+    {
+      href: 'https://www.instagram.com/atelieahois_?igsh=MXNkdzJxaWx6OWli',
+      label: 'Instagram',
+      external: true,
+    },
+  ]
 
   function onScroll() {
     if (!ticking) {
       requestAnimationFrame(() => {
-        visible = window.scrollY > window.innerHeight * 0.8;
-        ticking = false;
-      });
-      ticking = true;
+        visible = window.scrollY > window.innerHeight * 0.8
+        ticking = false
+      })
+      ticking = true
     }
   }
 
   function toggleMenu() {
-    menuOpen = !menuOpen;
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    menuOpen = !menuOpen
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
   }
 
   function closeMenu() {
-    menuOpen = false;
-    document.body.style.overflow = '';
+    menuOpen = false
+    document.body.style.overflow = ''
   }
+
+  $effect(() => {
+    if (menuOpen) {
+      requestAnimationFrame(() => {
+        menuMounted = true
+      })
+    } else {
+      menuMounted = false
+    }
+  })
 </script>
 
 <svelte:window onscroll={onScroll} />
 
-<!-- Mobile hamburger -->
-<button
-  onclick={toggleMenu}
-  class="md:hidden fixed top-4 right-4 z-50 p-2.5 rounded-full bg-marrom-escuro/85 backdrop-blur-md text-bege shadow-lg border border-bege/10 transition-all duration-300 hover:bg-marrom-escuro active:scale-90"
-  aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+<!-- ===== MOBILE BAR ===== -->
+<div
+  class={`md:hidden fixed top-3 left-3 right-3 z-50 transition-all duration-700 ease-out ${visible ? 'translate-y-0 opacity-100' : '-translate-y-[calc(100%+1rem)] opacity-0 pointer-events-none'}`}
 >
-  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-    {#if menuOpen}
-      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-    {:else}
-      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-    {/if}
-  </svg>
-</button>
+  <div
+    class={`flex items-center justify-between rounded-2xl px-4 py-2.5 border shadow-lg transition-all duration-500 ${menuOpen ? 'bg-white/10 backdrop-blur-xl border-white/10' : 'bg-white/80 backdrop-blur-md border-white/20'}`}
+  >
+    <a
+      href="#"
+      class={`flex-shrink-0 transition-all duration-500 ${menuOpen ? 'invert' : ''}`}
+      aria-label="Ateliê Ahois - Início"
+    >
+      <img
+        src="/images/footer_logo.png"
+        alt="Ateliê Ahois"
+        class="h-8 w-auto brightness-0"
+      />
+    </a>
 
-<!-- Mobile overlay -->
+    <button
+      onclick={toggleMenu}
+      class={`relative flex items-center justify-center w-10 h-10 rounded-xl border transition-all duration-500 hover:scale-105 active:scale-95 ${menuOpen ? 'bg-transparent border-white/30' : 'bg-marrom-escuro border-marrom-escuro/10'}`}
+      aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+    >
+      <div class="relative w-5 h-5">
+        <span
+          class={`absolute left-0 right-0 top-1/2 h-px transition-all duration-500 ${menuOpen ? 'bg-white rotate-45' : 'bg-bege -translate-y-[5px]'}`}
+        />
+        <span
+          class={`absolute left-0 right-0 top-1/2 h-px transition-all duration-500 ${menuOpen ? 'bg-white -rotate-45' : 'bg-bege translate-y-[5px]'}`}
+        />
+      </div>
+    </button>
+  </div>
+</div>
+
+<!-- ===== MOBILE OVERLAY ===== -->
 {#if menuOpen}
   <div
-    class="md:hidden fixed inset-0 z-40 bg-marrom-escuro/95 backdrop-blur-xl flex flex-col items-center justify-center gap-10"
-    onclick={(e) => { if (e.target === e.currentTarget) closeMenu(); }}
+    class="md:hidden fixed inset-2 z-40 bg-marrom-escuro rounded-2xl flex flex-col overflow-hidden"
     role="dialog"
     aria-modal="true"
     aria-label="Navegação"
   >
-    <a href="#" onclick={closeMenu} class="text-bege text-2xl font-semibold tracking-wide hover:text-white transition-colors">
-      Início
-    </a>
-    <a href="#materiais" onclick={closeMenu} class="text-bege/70 text-2xl font-medium tracking-wide hover:text-white transition-colors">
-      Materiais
-    </a>
-    <a href="#artesanato" onclick={closeMenu} class="text-bege/70 text-2xl font-medium tracking-wide hover:text-white transition-colors">
-      Artesanato
-    </a>
-    <a href="https://www.instagram.com/atelieahois_?igsh=MXNkdzJxaWx6OWli" target="_blank" rel="noopener noreferrer"
-       class="text-bege/70 text-2xl font-medium tracking-wide hover:text-white transition-colors">
-      Instagram
-    </a>
-    <a href="#catalogo"
-       class="bg-bege text-marrom-escuro text-lg font-semibold px-10 py-3.5 rounded-full hover:bg-white transition-all duration-300 active:scale-95 mt-2"
-       onclick={closeMenu}>
-      Encomendar
-    </a>
+    <nav class="flex flex-col items-center justify-center gap-6 flex-1 pt-20 pb-12 px-6">
+      {#each navLinks as link, i}
+        <a
+          href={link.href}
+          {...link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+          onclick={closeMenu}
+          class="text-white text-3xl font-medium tracking-wide hover:text-bege transition-colors duration-300 overflow-hidden"
+        >
+          <span
+            class={`block transition-all duration-600 ease-[cubic-bezier(0.25,1,0.5,1)] ${menuMounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+            style="transition-delay: {0.3 + i * 0.1}s"
+          >
+            {link.label}
+          </span>
+        </a>
+      {/each}
+      <a
+        href="#catalogo"
+        onclick={closeMenu}
+        class="bg-bege text-marrom-escuro text-lg font-semibold px-10 py-3.5 rounded-full hover:bg-white transition-all duration-300 active:scale-95 overflow-hidden mt-2"
+      >
+        <span
+          class={`block transition-all duration-600 ease-[cubic-bezier(0.25,1,0.5,1)] ${menuMounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+          style="transition-delay: 0.7s"
+        >
+          Encomendar
+        </span>
+      </a>
+    </nav>
   </div>
 {/if}
 
-<!-- Desktop navbar -->
+<!-- ===== DESKTOP NAVBAR (two pills) ===== -->
 <nav
-  class="hidden md:block fixed top-0 left-0 right-0 z-30 transition-all duration-700 ease-out"
-  class:translate-y-0={visible}
-  class:-translate-y-full={!visible}
-  class:opacity-100={visible}
-  class:opacity-0={!visible}
-  class:pointer-events-none={!visible}
+  class={`hidden md:block fixed top-0 left-0 right-0 z-30 px-6 pt-5 transition-all duration-700 ease-out ${visible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}
 >
-  <div class="flex justify-center mt-2">
-    <div class="bg-marrom-escuro/85 backdrop-blur-md rounded-full px-4 py-2 flex items-center justify-center gap-6 shadow-lg border border-bege/10">
-      <a href="#" class="text-bege text-sm font-semibold tracking-wide hover:text-white transition-colors">
-        Início
+  <div class="flex items-center justify-between">
+    <!-- Logo pill -->
+    <div
+      class="bg-white/80 backdrop-blur-md rounded-3xl px-8 py-5 border border-white/20 shadow-lg transition-all duration-500 hover:bg-white/90 hover:shadow-xl"
+    >
+      <a href="#" aria-label="Ateliê Ahois - Início" class="block">
+        <img
+          src="/images/footer_logo.png"
+          alt="Ateliê Ahois"
+          class="h-11 w-auto brightness-0"
+        />
       </a>
-      <a href="#materiais" class="text-bege/70 text-sm font-medium tracking-wide hover:text-white transition-colors">
-        Materiais
-      </a>
-      <a href="#artesanato" class="text-bege/70 text-sm font-medium tracking-wide hover:text-white transition-colors">
-        Artesanato
-      </a>
-      <a href="https://www.instagram.com/atelieahois_?igsh=MXNkdzJxaWx6OWli" target="_blank" rel="noopener noreferrer"
-         class="text-bege/70 text-sm font-medium tracking-wide hover:text-white transition-colors">
-        Instagram
-      </a>
-      <a href="#catalogo"
-         class="bg-bege text-marrom-escuro text-sm font-semibold px-4 py-1.5 rounded-full hover:bg-white transition-colors">
+    </div>
+
+    <!-- Nav links pill -->
+    <div
+      class="bg-white/80 backdrop-blur-md rounded-3xl px-5 py-3 border border-white/20 shadow-lg flex items-center gap-1"
+    >
+      {#each navLinks as link}
+        <a
+          href={link.href}
+          {...link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+          class="text-marrom-escuro/80 text-base font-medium tracking-wide px-4 py-2.5 rounded-xl hover:bg-marrom-escuro/5 hover:text-marrom-escuro transition-all duration-300"
+        >
+          {link.label}
+        </a>
+      {/each}
+      <a
+        href="#catalogo"
+        class="bg-marrom-escuro text-bege text-base font-semibold px-6 py-2.5 rounded-xl hover:bg-marrom-claro transition-all duration-300 active:scale-95 ml-1"
+      >
         Encomendar
       </a>
     </div>
