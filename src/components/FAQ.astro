@@ -1,0 +1,50 @@
+---
+const faqs = [
+  {
+    q: 'Quanto tempo leva para ficar pronto?',
+    a: 'O prazo varia conforme a peça e a demanda. Em média, de 3 a 7 dias úteis. Para encomendas especiais, combinamos o prazo diretamente pelo WhatsApp.',
+  },
+  {
+    q: 'Vocês enviam para todo o Brasil?',
+    a: 'Sim! Enviamos para todo o Brasil via Correios. O frete é calculado conforme o CEP de destino e informado antes da finalização do pedido.',
+  },
+  {
+    q: 'Quais formas de pagamento?',
+    a: 'Aceitamos PIX (à vista ou parcelado no cartão pelo PIX parcelado), transferência bancária e dinheiro para retirada local.',
+  },
+  {
+    q: 'Posso personalizar cores e tamanhos?',
+    a: 'Com certeza! Cada peça é feita à mão e podemos adaptar cores, tamanhos e detalhes. É só conversar com a gente pelo WhatsApp.',
+  },
+  {
+    q: 'Como cuidar das peças de crochê?',
+    a: 'Recomendamos lavar à mão com água fria e sabão neutro, secar à sombra na horizontal. Não usar máquina de lavar, alvejante ou secadora.',
+  },
+  {
+    q: 'O que é Amigurumi?',
+    a: 'Amigurumi é uma técnica japonesa de crochê para criar bonecos e bichinhos. Nossos amigurumis são feitos com fio 100% algodão e enchimento hipoalergênico, seguros para crianças.',
+  },
+]
+---
+
+<section class="bg-bege py-16 md:py-24 px-6 md:px-16" style="content-visibility: auto">
+  <div class="max-w-2xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-bold text-marrom-escuro text-center mb-12">
+      Dúvidas Frequentes
+    </h2>
+
+    <div class="divide-y divide-marrom-escuro/15">
+      {faqs.map((faq) => (
+        <details class="group">
+          <summary class="flex justify-between items-center cursor-pointer list-none font-semibold text-marrom-escuro py-4 select-none">
+            {faq.q}
+            <svg class="w-5 h-5 shrink-0 ml-4 text-marrom-claro transition-transform duration-200 group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </summary>
+          <p class="pb-4 text-marrom-escuro/70 leading-relaxed">{faq.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

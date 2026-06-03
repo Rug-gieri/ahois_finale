@@ -32,7 +32,10 @@
       return
     }
     const sb = getSupabase()
-    if (!sb) return
+    if (!sb) {
+      erro = 'Supabase não configurado. Verifique as variáveis de ambiente.'
+      return
+    }
     loading = true
     const { error } = await sb.auth.signInWithPassword({ email, password })
     loading = false

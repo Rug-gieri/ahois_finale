@@ -17,7 +17,7 @@ const items = [
 ]
 ---
 
-<section id="materiais" class="flex flex-col md:flex-row">
+<section id="materiais" class="flex flex-col md:flex-row" style="content-visibility: auto">
   <div class="w-full md:w-1/2 bg-marrom-escuro p-10 md:p-16 flex flex-col justify-center min-h-[50vh] md:min-h-screen">
     <h2 class="text-4xl md:text-5xl font-bold text-bege leading-tight mb-10">
       Materiais de alta qualidade,<br/>toque humano.
@@ -40,6 +40,8 @@ const items = [
       src={imageSrc}
       alt={imageAlt}
       class="w-full h-[50vh] md:h-screen object-cover"
+      loading="lazy"
+      decoding="async"
     />
   </div>
 </section>
