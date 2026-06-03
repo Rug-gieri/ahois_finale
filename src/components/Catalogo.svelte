@@ -1,30 +1,11 @@
 <script>
-  import { onMount } from 'svelte'
-  import { getSupabase } from '../lib/supabase'
-  import { categorias, exemplares } from '../data/produtos'
   import ProductCard from './ProductCard.svelte'
   import { cart } from '../lib/cart.svelte'
 
-  let filtro = $state('Todos')
-  let produtos = $state([])
-  let carregando = $state(true)
+  let { produtos, categorias } = $props()
 
-  onMount(async () => {
-    const sb = getSupabase()
-    if (!sb) {
-      produtos = exemplares
-      carregando = false
-      return
-    }
-    try {
-      const { data, error: dbError } = await sb.from('produtos').select('*').eq('active', true).order('id')
-      if (dbError) throw dbError
-      produtos = data && data.length > 0 ? data : exemplares
-    } catch (err) {
-      produtos = exemplares
-    }
-    carregando = false
-  })
+  let filtro = $state('Todos')
+  let filtered = $derived(filtro === 'Todos' ? produtos : produtos.filter(p => p.category === filtro))
 </script>
 
 <section id="catalogo" class="max-w-7xl mx-auto px-4 py-16 md:py-24">
@@ -55,15 +36,11 @@
     {/each}
   </div>
 
-  {#if carregando}
-    <p class="text-center text-marrom-claro/50 py-12">Carregando...</p>
-  {:else}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {#each produtos.filter((p) => filtro === 'Todos' || p.category === filtro) as product}
-        <ProductCard {product} />
-      {/each}
-    </div>
-  {/if}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {#each filtered as product}
+      <ProductCard {product} />
+    {/each}
+  </div>
 
   {#if cart.count > 0}
     <div class="mt-8 text-center text-sm text-marrom-claro/60">

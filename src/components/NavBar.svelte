@@ -1,9 +1,16 @@
 <script>
   let visible = $state(false);
   let menuOpen = $state(false);
+  let ticking = $state(false);
 
   function onScroll() {
-    visible = window.scrollY > window.innerHeight * 0.8;
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        visible = window.scrollY > window.innerHeight * 0.8;
+        ticking = false;
+      });
+      ticking = true;
+    }
   }
 
   function toggleMenu() {

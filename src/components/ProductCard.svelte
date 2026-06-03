@@ -7,7 +7,7 @@
 <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col">
   <div class="w-full aspect-square bg-bege flex items-center justify-center text-6xl select-none relative overflow-hidden">
     {#if product.image_url}
-      <img src={product.image_url} alt={product.name} class="absolute inset-0 w-full h-full object-cover" />
+      <img src={product.image_url} alt={product.name} class="absolute inset-0 w-full h-full object-cover" width="400" height="400" />
     {:else}
       {product.emoji}
     {/if}

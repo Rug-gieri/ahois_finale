@@ -33,10 +33,13 @@ tanstack/
 │   │   ├── admin/
 │   │   │   ├── Admin.svelte          # Login com modo demo
 │   │   │   └── Dashboard.svelte      # CRUD com upload de imagem
-│   │   ├── Agenda.astro              # Seção de eventos
+│   │   ├── Agenda.astro              # Seção de eventos e feiras
 │   │   ├── BotaoEncomenda.svelte     # Botão CTA WhatsApp
-│   │   ├── CartDrawer.svelte         # Drawer do carrinho
-│   │   ├── Catalogo.svelte           # Catálogo com filtros por categoria
+│   │   ├── CartDrawer.svelte         # Drawer do carrinho + botão WhatsApp flutuante
+│   │   ├── Catalogo.svelte           # Catálogo com filtros por categoria (server-side)
+│   │   ├── ComoFunciona.astro        # Seção de 4 passos do fluxo de compra
+│   │   ├── Entrega.astro             # Seção de frete e entrega
+│   │   ├── FAQ.astro                 # Dúvidas frequentes (accordion nativo)
 │   │   ├── FeatureLeft.astro         # Seção materiais
 │   │   ├── FeatureRight.astro        # Seção artesanato
 │   │   ├── Footer.astro
@@ -45,11 +48,12 @@ tanstack/
 │   │   ├── ProductCard.svelte        # Card de produto
 │   │   └── SobreArtesa.astro         # Seção sobre a artesã
 │   ├── data/
-│   │   └── produtos.ts              # Dados estáticos de fallback
+│   │   └── produtos.ts              # Tipos e dados estáticos de fallback
 │   ├── layouts/
-│   │   └── Layout.astro
+│   │   └── Layout.astro              # HTML base com SEO (OG, Twitter Card, JSON-LD)
 │   ├── lib/
 │   │   ├── cart.svelte.ts            # CartStore reativo (Svelte 5 runes)
+│   │   ├── produtos.ts               # Fetch server-side com cache e fallback
 │   │   └── supabase.ts               # Cliente Supabase lazy singleton
 │   ├── pages/
 │   │   ├── index.astro               # Página principal da loja

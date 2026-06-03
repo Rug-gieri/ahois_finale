@@ -17,12 +17,14 @@ const items = [
 ]
 ---
 
-<section id="artesanato" class="flex flex-col md:flex-row">
+<section id="artesanato" class="flex flex-col md:flex-row" style="content-visibility: auto">
   <div class="w-full md:w-1/2 order-2 md:order-1">
     <img
       src={imageSrc}
       alt={imageAlt}
       class="w-full h-[50vh] md:h-screen object-cover"
+      loading="lazy"
+      decoding="async"
     />
   </div>
 

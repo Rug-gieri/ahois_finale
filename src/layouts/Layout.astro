@@ -18,6 +18,44 @@ const { title = 'Ateliê Ahois — Crochê feito com carinho' } = Astro.props
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- SEO -->
+    <meta name="description" content="Ateliê Ahois — Crochê artesanal feito à mão em Porto Velho. Amigurumis, decoração, acessórios e peças exclusivas feitas com fio 100% algodão. Enviamos para todo o Brasil." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://atelieahois.com.br" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content="Ateliê Ahois — Crochê artesanal feito à mão em Porto Velho. Amigurumis, decoração, acessórios e peças exclusivas feitas com fio 100% algodão. Enviamos para todo o Brasil." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/images/hero_logo.png" />
+    <meta property="og:locale" content="pt_BR" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content="Ateliê Ahois — Crochê artesanal feito à mão em Porto Velho. Amigurumis, decoração, acessórios e peças exclusivas feitas com fio 100% algodão. Enviamos para todo o Brasil." />
+    <meta name="twitter:image" content="/images/hero_logo.png" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Ateliê Ahois",
+        "description": "Crochê artesanal feito à mão em Porto Velho. Amigurumis, decoração e acessórios em fio 100% algodão.",
+        "url": "https://atelieahois.com.br",
+        "telephone": "+556992366937",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Porto Velho",
+          "addressRegion": "RO",
+          "addressCountry": "BR"
+        },
+        "sameAs": ["https://www.instagram.com/atelieahois_"]
+      }
+    </script>
+
     <title>{title}</title>
   </head>
   <body class="bg-branco text-marrom-escuro">

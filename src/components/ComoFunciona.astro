@@ -1,0 +1,64 @@
+---
+const steps = [
+  {
+    icon: '🛍️',
+    title: 'Escolha no catálogo',
+    desc: 'Navegue pelas peças disponíveis e encontre a ideal para você',
+  },
+  {
+    icon: '🛒',
+    title: 'Monte seu carrinho',
+    desc: 'Adicione os itens que desejar com um clique',
+  },
+  {
+    icon: '💬',
+    title: 'Finalize pelo WhatsApp',
+    desc: 'Seu pedido é enviado direto para nosso WhatsApp, sem complicação',
+  },
+  {
+    icon: '📦',
+    title: 'Receba em casa',
+    desc: 'Enviamos para todo o Brasil com todo o carinho',
+  },
+]
+---
+
+<section class="bg-branco py-16 md:py-24 px-6 md:px-16" style="content-visibility: auto">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-bold text-marrom-escuro text-center mb-4">
+      Como Funciona
+    </h2>
+    <p class="text-marrom-escuro/70 text-center text-lg mb-14 max-w-lg mx-auto">
+      É simples encomendar sua peça artesanal
+    </p>
+
+    <div class="flex flex-col md:flex-row md:items-start gap-8 md:gap-0">
+      {
+        steps.map((step, i) => (
+          <div class="flex md:flex-col items-center gap-4 md:gap-0 flex-1 relative">
+            <div class="
+              w-14 h-14 md:w-16 md:h-16 rounded-full bg-marrom-escuro text-bege
+              flex items-center justify-center text-xl font-bold shrink-0
+              relative z-10
+            ">
+              {i + 1}
+            </div>
+
+            <div class="flex-1 md:text-center md:mt-6 md:px-3">
+              <p class="text-2xl mb-2">{step.icon}</p>
+              <h3 class="text-lg font-bold text-marrom-escuro mb-1">{step.title}</h3>
+              <p class="text-marrom-escuro/70 text-sm leading-relaxed">{step.desc}</p>
+            </div>
+
+            {i < steps.length - 1 && (
+              <>
+                <div class="hidden md:block absolute top-8 left-[calc(50%+2rem)] w-[calc(100%-4rem)] h-0.5 bg-marrom-escuro/20" />
+                <div class="md:hidden w-0.5 h-8 bg-marrom-escuro/20 self-center" />
+              </>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
