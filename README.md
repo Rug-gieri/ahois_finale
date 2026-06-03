@@ -234,7 +234,7 @@ O administrador autentica via Supabase Auth (email/senha). Se o Supabase não es
 
 ## Contato
 
-- **WhatsApp:** [(69) 9236-6937](https://wa.me/556992366937)
+- **WhatsApp:** [(69) 8120-1606](https://wa.me/556981201606)
 
 ## Licença
 
