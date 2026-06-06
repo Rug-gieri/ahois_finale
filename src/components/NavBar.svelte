@@ -1,8 +1,11 @@
 <script>
+  import { cart } from '../lib/cart.svelte'
+
   let scrolled = $state(false)
   let menuOpen = $state(false)
   let menuMounted = $state(false)
   let ticking = $state(false)
+  let notificacao = $state('')
 
   const navLinks = [
     { href: '#', label: 'Início' },
@@ -42,6 +45,14 @@
       })
     } else {
       menuMounted = false
+    }
+  })
+
+  $effect(() => {
+    if (cart.lastAddedName) {
+      notificacao = `${cart.lastAddedName} adicionado!`
+      const timer = setTimeout(() => { notificacao = '' }, 2500)
+      return () => clearTimeout(timer)
     }
   })
 </script>
@@ -155,6 +166,33 @@
           {link.label}
         </a>
       {/each}
+
+      <!-- Cart button -->
+      <div class="relative">
+        <button
+          onclick={() => { cart.aberto = !cart.aberto; cart.clearLastAdded() }}
+          class="relative text-marrom-escuro/80 text-base font-medium tracking-wide px-4 py-2.5 rounded-xl hover:bg-marrom-escuro/5 hover:text-marrom-escuro transition-all duration-300 flex items-center gap-1.5"
+          aria-label={cart.aberto ? 'Fechar carrinho' : 'Abrir carrinho'}
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
+          </svg>
+          Carrinho
+          {#if cart.count > 0}
+            <span class="absolute -top-0.5 -right-0.5 bg-marrom-escuro text-bege text-[10px] font-bold rounded-full w-4.5 h-4.5 flex items-center justify-center">
+              {cart.count > 99 ? '99+' : cart.count}
+            </span>
+          {/if}
+        </button>
+
+        <!-- Notification toast -->
+        {#if notificacao}
+          <div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-marrom-escuro text-bege text-xs font-medium px-3 py-1.5 rounded-lg whitespace-nowrap shadow-lg animate-notification-pop z-50">
+            {notificacao}
+          </div>
+        {/if}
+      </div>
+
       <a
         href="#catalogo"
         class="bg-marrom-escuro text-bege text-base font-semibold px-6 py-2.5 rounded-xl hover:bg-marrom-claro transition-all duration-300 active:scale-95 ml-1"
@@ -164,3 +202,15 @@
     </div>
   </div>
 </nav>
+
+<style>
+  @keyframes notification-pop {
+    0% { transform: translate(-50%, 8px); opacity: 0; }
+    15% { transform: translate(-50%, 0); opacity: 1; }
+    85% { transform: translate(-50%, 0); opacity: 1; }
+    100% { transform: translate(-50%, -4px); opacity: 0; }
+  }
+  .animate-notification-pop {
+    animation: notification-pop 2.5s ease-out forwards;
+  }
+</style>

@@ -27,7 +27,7 @@
       class="w-full bg-marrom-escuro text-bege rounded-full py-2.5 font-semibold text-sm cursor-pointer
              hover:bg-marrom-claro transition-colors duration-200"
     >
-      Adicionar
+      Adicionar ao carrinho
     </button>
   </div>
 </div>

@@ -16,6 +16,8 @@ class CartStore {
   freteValor = $state(0)
   freteGratis = $state(false)
   freteMotivo = $state('')
+  lastAddedName = $state('')
+  aberto = $state(false)
 
   add(product: Product) {
     const existing = this.items.find((item) => item.product.id === product.id)
@@ -24,6 +26,11 @@ class CartStore {
     } else {
       this.items.push({ product, quantity: 1 })
     }
+    this.lastAddedName = product.name
+  }
+
+  clearLastAdded() {
+    this.lastAddedName = ''
   }
 
   remove(id: number) {
