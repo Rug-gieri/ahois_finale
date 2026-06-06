@@ -10,17 +10,17 @@ const {
 } = Astro.props
 
 const items = [
-  { title: 'Algodão 100%', desc: 'Chega de plástico. Nossos fios são naturais e macios.' },
-  { title: 'Peças com firmeza', desc: 'Pontos firmes e acabamento impecável que duram.' },
-  { title: 'Cores que resistem', desc: 'Tingimento de alta qualidade que não desbote.' },
-  { title: 'Enchimento seguro', desc: 'Materiais hipoalergênicos para toda a família.' },
+  { title: 'Estímulo tátil real', desc: 'Texturas e pontos que ativam o sistema sensorial da criança — a tela do celular jamais fará isso.' },
+  { title: 'Imaginação sem limites', desc: 'Sem luzes nem sons prontos. A criança cria a voz, a história e o mundo do personagem.' },
+  { title: 'Objeto de transição afetiva', desc: 'Retém o cheiro dos pais e da casa, gerando segurança e reduzindo a ansiedade de separação.' },
+  { title: 'Segurança total', desc: 'Linha 100% algodão e olhos com trava. Seguro para morder, lavar e abraçar sem medo.' },
 ]
 ---
 
 <section id="materiais" class="flex flex-col md:flex-row" style="content-visibility: auto">
   <div class="w-full md:w-1/2 bg-marrom-escuro p-10 md:p-16 flex flex-col justify-center min-h-[50vh] md:min-h-screen">
     <h2 class="text-4xl md:text-5xl font-bold text-bege leading-tight mb-10">
-      Materiais de alta qualidade,<br/>toque humano.
+      Vantagens que<br/>o plástico não entrega.
     </h2>
     <ul class="space-y-6">
       {items.map((item) => (

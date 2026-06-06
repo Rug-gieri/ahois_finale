@@ -35,3 +35,52 @@ body {
 html {
   -webkit-tap-highlight-color: transparent;
 }
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes slideDown {
+  0% { opacity: 0; transform: translateY(-30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ctaEntrance {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.scroll-indicator {
+  animation: fadeIn 0.8s ease-out 1.2s both, bounce 2s ease-in-out 2s infinite;
+}
+
+.hero-illustration {
+  animation: fadeInUp 0.9s ease-out 0.2s both;
+}
+
+.hero-text-logo {
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.hero-tagline {
+  animation: fadeInUp 0.7s ease-out 0.6s both;
+}
+
+.navbar-animate {
+  animation: slideDown 0.7s ease-out 0.1s both;
+}
+
+.animate-cta-entrance {
+  animation: ctaEntrance 0.7s ease-out 1.4s both;
+}

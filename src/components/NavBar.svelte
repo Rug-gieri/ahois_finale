@@ -1,5 +1,5 @@
 <script>
-  let visible = $state(false)
+  let scrolled = $state(false)
   let menuOpen = $state(false)
   let menuMounted = $state(false)
   let ticking = $state(false)
@@ -18,7 +18,7 @@
   function onScroll() {
     if (!ticking) {
       requestAnimationFrame(() => {
-        visible = window.scrollY > window.innerHeight * 0.8
+        scrolled = window.scrollY > 20
         ticking = false
       })
       ticking = true
@@ -50,10 +50,10 @@
 
 <!-- ===== MOBILE BAR ===== -->
 <div
-  class={`md:hidden fixed top-3 left-3 right-3 z-50 transition-all duration-700 ease-out ${visible ? 'translate-y-0 opacity-100' : '-translate-y-[calc(100%+1rem)] opacity-0 pointer-events-none'}`}
+  class="md:hidden fixed top-3 left-3 right-3 z-50 transition-all duration-700 ease-out"
 >
   <div
-    class={`flex items-center justify-between rounded-2xl px-4 py-2.5 border shadow-lg transition-all duration-500 ${menuOpen ? 'bg-white/10 backdrop-blur-xl border-white/10' : 'bg-white/80 backdrop-blur-md border-white/20'}`}
+    class={`flex items-center justify-between rounded-2xl px-4 py-2.5 border shadow-lg transition-all duration-500 ${menuOpen ? 'bg-white/10 backdrop-blur-xl border-white/10' : scrolled ? 'bg-white/80 backdrop-blur-md border-white/20' : 'bg-white/50 backdrop-blur-sm border-white/10'}`}
   >
     <a
       href="#"
@@ -126,12 +126,12 @@
 
 <!-- ===== DESKTOP NAVBAR (two pills) ===== -->
 <nav
-  class={`hidden md:block fixed top-0 left-0 right-0 z-30 px-6 pt-5 transition-all duration-700 ease-out ${visible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}
+  class="hidden md:block fixed top-0 left-0 right-0 z-30 px-6 pt-5 navbar-animate"
 >
   <div class="flex items-center justify-between">
     <!-- Logo pill -->
     <div
-      class="bg-white/80 backdrop-blur-md rounded-3xl px-8 py-5 border border-white/20 shadow-lg transition-all duration-500 hover:bg-white/90 hover:shadow-xl"
+      class="bg-white/50 backdrop-blur-sm rounded-3xl px-8 py-5 border border-white/10 shadow-lg transition-all duration-500"
     >
       <a href="#" aria-label="Ateliê Ahois - Início" class="block">
         <img
@@ -144,7 +144,7 @@
 
     <!-- Nav links pill -->
     <div
-      class="bg-white/80 backdrop-blur-md rounded-3xl px-5 py-3 border border-white/20 shadow-lg flex items-center gap-1"
+      class="bg-white/50 backdrop-blur-sm rounded-3xl px-5 py-3 border border-white/10 shadow-lg flex items-center gap-1"
     >
       {#each navLinks as link}
         <a

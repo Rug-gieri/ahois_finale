@@ -1,10 +1,10 @@
 <script>
   import { fade } from 'svelte/transition'
   import { cart } from '../lib/cart.svelte'
+  import { calcularFrete } from '../lib/frete'
   import { getSupabase } from '../lib/supabase'
 
   let aberto = $state(false)
-  let nome = $state('')
   let salvando = $state(false)
   let aviso = $state('')
   let timeoutAviso = $state(null)
@@ -25,6 +25,19 @@
     aberto = true
   }
 
+  function atualizarFrete() {
+    if (!cart.cep || !cart.estado) {
+      cart.freteValor = 0
+      cart.freteGratis = false
+      cart.freteMotivo = ''
+      return
+    }
+    const result = calcularFrete(cart.cep, cart.estado, cart.total)
+    cart.freteValor = result.valor
+    cart.freteGratis = result.gratis
+    cart.freteMotivo = result.motivo
+  }
+
   async function finalizar() {
     salvando = true
     const sb = getSupabase()
@@ -40,17 +53,24 @@
         try {
           const { data: cliente } = await sb
             .from('clientes')
-            .insert({ name: nome || 'Cliente WhatsApp', phone: PHONE })
+            .insert({ name: cart.nome || 'Cliente WhatsApp', phone: PHONE })
             .select()
             .single()
 
           await sb.from('pedidos').insert({
             cliente_id: cliente?.id ?? null,
-            cliente_nome: nome || 'Cliente WhatsApp',
+            cliente_nome: cart.nome || 'Cliente WhatsApp',
             cliente_phone: PHONE,
             items: pedidoItems,
-            total: cart.total,
+            total: cart.totalComFrete,
             status: 'pending',
+            cep: cart.cep || null,
+            endereco: cart.endereco || null,
+            cidade: cart.cidade || null,
+            estado: cart.estado || null,
+            complemento: cart.complemento || null,
+            frete: cart.freteGratis ? 0 : cart.freteValor,
+            metodo_envio: 'pac',
           })
         } catch {
           /* fallback: apenas WhatsApp */
@@ -62,6 +82,20 @@
     salvando = false
   }
 </script>
+
+<!-- Floating CTA: Ver produtos agora -->
+<a
+  href="#catalogo"
+  class="fixed bottom-28 right-4 z-50 bg-marrom-escuro text-bege font-semibold px-6 py-3 rounded-full shadow-xl cursor-pointer
+         hover:bg-marrom-claro hover:scale-105 active:scale-95 transition-all duration-300
+         flex items-center gap-2 text-sm md:text-base animate-cta-entrance"
+  aria-label="Ver produtos agora"
+>
+  Ver produtos agora
+  <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+  </svg>
+</a>
 
 <!-- Floating cart button -->
 <button
@@ -85,7 +119,7 @@
   href="https://wa.me/556981201606?text=Olá! Gostaria de saber mais sobre as peças do Ateliê Ahois."
   target="_blank"
   rel="noopener"
-  class="fixed bottom-4 left-4 z-50 bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-xl transition-colors duration-200 animate-whatsapp-pulse"
+  class="fixed bottom-20 right-4 z-50 bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-xl transition-colors duration-200 animate-whatsapp-pulse"
   aria-label="Fale conosco no WhatsApp"
 >
   <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -194,16 +228,68 @@
   <!-- Footer -->
   {#if cart.items.length > 0}
     <div class="border-t border-bege px-6 py-4 space-y-3">
-      <input
-        type="text"
-        bind:value={nome}
-        placeholder="Seu nome (opcional)"
-        class="w-full border border-bege rounded-full px-4 py-2.5 text-sm text-marrom-escuro bg-branco placeholder:text-marrom-claro/40 focus:outline-none focus:ring-2 focus:ring-marrom-claro/30 transition-shadow"
-      />
-      <div class="flex justify-between items-center">
-        <span class="text-base font-semibold text-marrom-escuro">Total</span>
-        <span class="text-xl font-bold text-marrom-escuro">R$ {cart.total.toFixed(2)}</span>
+      <input type="text" bind:value={cart.nome} placeholder="Nome completo" required
+        class="w-full border border-bege rounded-full px-4 py-2.5 text-sm text-marrom-escuro bg-branco placeholder:text-marrom-claro/40 focus:outline-none focus:ring-2 focus:ring-marrom-claro/30 transition-shadow" />
+
+      <div class="grid grid-cols-2 gap-2">
+        <input type="text" bind:value={cart.cep} placeholder="CEP" maxlength="9" oninput={atualizarFrete}
+          class="w-full border border-bege rounded-full px-4 py-2.5 text-sm text-marrom-escuro bg-branco placeholder:text-marrom-claro/40 focus:outline-none focus:ring-2 focus:ring-marrom-claro/30 transition-shadow" />
+        <select bind:value={cart.estado} onchange={atualizarFrete}
+          class="w-full border border-bege rounded-full px-4 py-2.5 text-sm text-marrom-escuro bg-branco focus:outline-none focus:ring-2 focus:ring-marrom-claro/30 transition-shadow">
+          <option value="">Estado</option>
+          <option value="RO">RO</option>
+          <option value="AC">AC</option>
+          <option value="AM">AM</option>
+          <option value="RR">RR</option>
+          <option value="PA">PA</option>
+          <option value="AP">AP</option>
+          <option value="TO">TO</option>
+          <option value="MA">MA</option>
+          <option value="PI">PI</option>
+          <option value="CE">CE</option>
+          <option value="RN">RN</option>
+          <option value="PB">PB</option>
+          <option value="PE">PE</option>
+          <option value="AL">AL</option>
+          <option value="SE">SE</option>
+          <option value="BA">BA</option>
+          <option value="MT">MT</option>
+          <option value="MS">MS</option>
+          <option value="GO">GO</option>
+          <option value="DF">DF</option>
+          <option value="SP">SP</option>
+          <option value="RJ">RJ</option>
+          <option value="MG">MG</option>
+          <option value="ES">ES</option>
+          <option value="PR">PR</option>
+          <option value="SC">SC</option>
+          <option value="RS">RS</option>
+        </select>
       </div>
+
+      <input type="text" bind:value={cart.endereco} placeholder="Endereço (rua e número)"
+        class="w-full border border-bege rounded-full px-4 py-2.5 text-sm text-marrom-escuro bg-branco placeholder:text-marrom-claro/40 focus:outline-none focus:ring-2 focus:ring-marrom-claro/30 transition-shadow" />
+
+      <input type="text" bind:value={cart.cidade} placeholder="Cidade"
+        class="w-full border border-bege rounded-full px-4 py-2.5 text-sm text-marrom-escuro bg-branco placeholder:text-marrom-claro/40 focus:outline-none focus:ring-2 focus:ring-marrom-claro/30 transition-shadow" />
+
+      <input type="text" bind:value={cart.complemento} placeholder="Complemento (opcional)"
+        class="w-full border border-bege rounded-full px-4 py-2.5 text-sm text-marrom-escuro bg-branco placeholder:text-marrom-claro/40 focus:outline-none focus:ring-2 focus:ring-marrom-claro/30 transition-shadow" />
+
+      {#if cart.freteMotivo}
+        <div class="flex justify-between items-center text-sm">
+          <span class="text-marrom-claro/70">{cart.freteMotivo}</span>
+          {#if !cart.freteGratis}
+            <span class="font-semibold text-marrom-escuro">R$ {cart.freteValor.toFixed(2)}</span>
+          {/if}
+        </div>
+      {/if}
+
+      <div class="flex justify-between items-center pt-2 border-t border-bege/50">
+        <span class="text-base font-semibold text-marrom-escuro">Total</span>
+        <span class="text-xl font-bold text-marrom-escuro">R$ {cart.totalComFrete.toFixed(2)}</span>
+      </div>
+
       <button
         onclick={finalizar}
         disabled={salvando}

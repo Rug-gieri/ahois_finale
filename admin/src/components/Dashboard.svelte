@@ -7,6 +7,7 @@
   let aba = $state('produtos')
   let produtos = $state([])
   let enderecos = $state([])
+  let pedidos = $state([])
   let carregando = $state(true)
   let erroDb = $state('')
 
@@ -46,14 +47,17 @@
       return
     }
     try {
-      const [p, e] = await Promise.all([
+      const [p, e, ped] = await Promise.all([
         supabase.from('produtos').select('*').order('id'),
         supabase.from('enderecos').select('*').order('id'),
+        supabase.from('pedidos').select('*').order('created_at', { ascending: false }),
       ])
       if (p.error) throw p.error
       if (e.error) throw e.error
+      if (ped.error) throw ped.error
       produtos = p.data ?? []
       enderecos = e.data ?? []
+      pedidos = ped.data ?? []
     } catch (err) {
       erroDb = err.message || 'Erro ao carregar dados.'
     }
@@ -221,6 +225,16 @@
       alert(err.message || 'Erro ao excluir.')
     }
   }
+
+  function statusCor(status: string) {
+    const map: Record<string, string> = {
+      pending: 'bg-yellow-100 text-yellow-800',
+      confirmed: 'bg-blue-100 text-blue-800',
+      completed: 'bg-green-100 text-green-800',
+      cancelled: 'bg-red-100 text-red-800',
+    }
+    return map[status] ?? 'bg-gray-100 text-gray-800'
+  }
 </script>
 
 <div class="min-h-screen bg-branco flex flex-col">
@@ -248,6 +262,11 @@
         class="px-5 py-2 rounded-full text-sm font-medium cursor-pointer transition-all duration-200
                {aba === 'enderecos' ? 'bg-marrom-escuro text-bege shadow-md' : 'bg-bege text-marrom-escuro hover:bg-marrom-claro hover:text-bege'}">
         Endereços
+      </button>
+      <button onclick={() => aba = 'pedidos'}
+        class="px-5 py-2 rounded-full text-sm font-medium cursor-pointer transition-all duration-200
+               {aba === 'pedidos' ? 'bg-marrom-escuro text-bege shadow-md' : 'bg-bege text-marrom-escuro hover:bg-marrom-claro hover:text-bege'}">
+        Pedidos
       </button>
     </div>
   </div>
@@ -422,6 +441,95 @@
               </tr>
             {:else}
               <tr><td colspan="4" class="text-center py-12 text-marrom-claro/50">Nenhum endereço cadastrado.</td></tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
+
+    {:else if aba === 'pedidos'}
+      <h2 class="text-xl font-bold text-marrom-escuro mb-4">Pedidos ({pedidos.length})</h2>
+
+      <div class="overflow-x-auto rounded-xl border border-bege/30">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-bege/30 text-marrom-claro text-xs uppercase tracking-wide">
+              <th class="text-left px-4 py-3">ID</th>
+              <th class="text-left px-4 py-3">Cliente</th>
+              <th class="text-left px-4 py-3">Total</th>
+              <th class="text-left px-4 py-3">Frete</th>
+              <th class="text-left px-4 py-3">Status</th>
+              <th class="text-left px-4 py-3">Data</th>
+              <th class="text-left px-4 py-3">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {#each pedidos as ped}
+              <tr class="border-t border-bege/20 hover:bg-bege/10 transition-colors">
+                <td class="px-4 py-3 font-mono text-xs">#{ped.id}</td>
+                <td class="px-4 py-3 font-medium">
+                  <div>{ped.cliente_nome ?? '—'}</div>
+                  <div class="text-xs text-marrom-claro/50">{ped.cliente_phone ?? ''}</div>
+                </td>
+                <td class="px-4 py-3">R$ {Number(ped.total).toFixed(2)}</td>
+                <td class="px-4 py-3">{ped.frete != null ? `R$ ${Number(ped.frete).toFixed(2)}` : '—'}</td>
+                <td class="px-4 py-3">
+                  <span class="inline-block px-2 py-0.5 rounded-full text-xs font-semibold {statusCor(ped.status)}">
+                    {ped.status}
+                  </span>
+                </td>
+                <td class="px-4 py-3 text-marrom-claro/70 text-xs">
+                  {new Date(ped.created_at).toLocaleDateString('pt-BR')}
+                </td>
+                <td class="px-4 py-3">
+                  <select
+                    value={ped.status}
+                    onchange={async (e) => {
+                      const novo = e.target.value
+                      const { error } = await supabase.from('pedidos').update({ status: novo }).eq('id', ped.id)
+                      if (error) { alert('Erro: ' + error.message); return }
+                      await carregar()
+                    }}
+                    class="text-xs border border-bege rounded-lg px-2 py-1 bg-branco focus:outline-none focus:border-marrom-claro cursor-pointer"
+                  >
+                    <option value="pending">Pendente</option>
+                    <option value="confirmed">Confirmado</option>
+                    <option value="completed">Concluído</option>
+                    <option value="cancelled">Cancelado</option>
+                  </select>
+                </td>
+              </tr>
+              {#if ped.endereco || ped.cep}
+                <tr class="border-t border-bege/10 bg-bege/5">
+                  <td colspan="7" class="px-4 py-2 text-xs text-marrom-claro/60">
+                    {ped.endereco}{ped.complemento ? `, ${ped.complemento}` : ''} — {ped.cidade}/{ped.estado} — CEP {ped.cep}
+                  </td>
+                </tr>
+              {/if}
+              {#if ped.codigo_rastreio}
+                <tr class="border-t border-bege/10 bg-bege/5">
+                  <td colspan="7" class="px-4 py-2 text-xs text-marrom-claro/60">
+                    Rastreio: {ped.codigo_rastreio}
+                  </td>
+                </tr>
+              {/if}
+              <tr class="border-t border-bege/10 bg-bege/5">
+                <td colspan="7" class="px-4 py-2">
+                  <input
+                    type="text"
+                    placeholder="Código de rastreio"
+                    value={ped.codigo_rastreio ?? ''}
+                    onchange={async (e) => {
+                      const codigo = e.target.value || null
+                      const { error } = await supabase.from('pedidos').update({ codigo_rastreio: codigo }).eq('id', ped.id)
+                      if (error) { alert('Erro: ' + error.message); return }
+                      await carregar()
+                    }}
+                    class="text-xs border border-bege rounded-lg px-2 py-1 bg-branco w-48 focus:outline-none focus:border-marrom-claro"
+                  />
+                </td>
+              </tr>
+            {:else}
+              <tr><td colspan="7" class="text-center py-12 text-marrom-claro/50">Nenhum pedido recebido.</td></tr>
             {/each}
           </tbody>
         </table>

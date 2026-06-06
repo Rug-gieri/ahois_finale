@@ -51,6 +51,14 @@ export interface PedidoDB {
   total: number
   status: 'pending' | 'confirmed' | 'completed' | 'cancelled'
   notes: string | null
+  cep: string | null
+  endereco: string | null
+  cidade: string | null
+  estado: string | null
+  complemento: string | null
+  frete: number | null
+  metodo_envio: string | null
+  codigo_rastreio: string | null
   created_at: string
   updated_at: string
 }
