@@ -141,10 +141,9 @@
 >
   <div class="flex items-center justify-between">
     <!-- Logo pill -->
-    <div
-      class="bg-white/50 backdrop-blur-sm rounded-3xl px-8 py-5 border border-white/10 shadow-lg transition-all duration-500"
-    >
-      <a href="#" aria-label="Ateliê Ahois - Início" class="block">
+    <div class="relative rounded-3xl px-8 py-5">
+      <div class="absolute inset-0 rounded-3xl bg-white/50 backdrop-blur-sm border border-white/10 shadow-lg transition-opacity duration-500 {scrolled ? 'opacity-100' : 'opacity-0'}" />
+      <a href="#" aria-label="Ateliê Ahois - Início" class="relative block">
         <img
           src="/images/footer_logo.png"
           alt="Ateliê Ahois"

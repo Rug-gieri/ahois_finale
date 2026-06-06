@@ -182,9 +182,8 @@ O administrador autentica via Supabase Auth (email/senha). Se o Supabase não es
 | `description` | TEXT | Descrição |
 | `price` | DECIMAL(10,2) | Preço em R$ |
 | `category` | TEXT | Categoria (Amigurumi, Casa & Decoração, Baby, Acessórios) |
-| `emoji` | TEXT | Emoji representativo |
 | `details` | JSONB | Objeto com materiais, tamanho, cores, cuidados |
-| `image_url` | TEXT | URL da imagem (Supabase Storage) |
+| `image_url` | TEXT NOT NULL | URL da imagem (Supabase Storage) |
 | `active` | BOOLEAN | Produto ativo/visível |
 
 **clientes** — Dados dos clientes

@@ -14,14 +14,13 @@ export interface ProdutoDB {
   description: string | null
   price: number
   category: string
-  emoji: string
   details: {
     materiais: string
     tamanho: string
     cores: string[]
     cuidados: string
   } | null
-  image_url: string | null
+  image_url: string
   active: boolean
   created_at: string
   updated_at: string

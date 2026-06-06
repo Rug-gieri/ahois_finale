@@ -11,9 +11,8 @@ export interface Product {
   description: string
   price: number
   category: string
-  emoji: string
   details: ProductDetails
-  image_url?: string
+  image_url: string
 }
 
 export const categorias = [
@@ -30,7 +29,6 @@ export const exemplares = [
     description: "Coelhinho de crochê com aproximadamente 20cm, perfeito para presentear.",
     price: 59.90,
     category: "Amigurumi",
-    emoji: "🐰",
     image_url: "/images/1.webp",
     details: {
       materiais: "Fio 100% algodão, enchimento hipoalergênico",
@@ -45,7 +43,6 @@ export const exemplares = [
     description: "Ursinho fofo de crochê com detalhes em cores pastel.",
     price: 69.90,
     category: "Amigurumi",
-    emoji: "🧸",
     image_url: "/images/2.webp",
     details: {
       materiais: "Fio 100% algodão, enchimento hipoalergênico",
@@ -60,7 +57,6 @@ export const exemplares = [
     description: "Cesta de crochê para organização e decoração. Disponível em várias cores.",
     price: 45.00,
     category: "Casa & Decoração",
-    emoji: "🧺",
     image_url: "/images/3.webp",
     details: {
       materiais: "Fio de algodão reciclado, reforço interno",
@@ -75,7 +71,6 @@ export const exemplares = [
     description: "Manta de crochê para sofá, feita com fio 100% algodão.",
     price: 129.90,
     category: "Casa & Decoração",
-    emoji: "🛋️",
     image_url: "/images/4.webp",
     details: {
       materiais: "Fio 100% algodão grosso",
@@ -90,7 +85,6 @@ export const exemplares = [
     description: "Tapete colorido de crochê feito com retalhos de tecido. Resistente e lavável.",
     price: 89.90,
     category: "Casa & Decoração",
-    emoji: "🟤",
     image_url: "/images/5.webp",
     details: {
       materiais: "Retalhos de tecido 100% algodão, base antiderrapante",
@@ -105,7 +99,6 @@ export const exemplares = [
     description: "Manta macia de crochê para bebê. Ideal para enxoval.",
     price: 79.90,
     category: "Baby",
-    emoji: "👶",
     image_url: "/images/6.jpg",
     details: {
       materiais: "Fio 100% algodão premium, enchimento macio",
@@ -120,7 +113,6 @@ export const exemplares = [
     description: "Botinha de crochê para bebê de 0 a 6 meses. Super macia e delicada.",
     price: 34.90,
     category: "Baby",
-    emoji: "🧦",
     image_url: "/images/7.jpg",
     details: {
       materiais: "Fio 100% algodão, solado antiderrapante",
@@ -135,7 +127,6 @@ export const exemplares = [
     description: "Gola de crochê com design moderno. Aquece e estiliza qualquer look.",
     price: 49.90,
     category: "Acessórios",
-    emoji: "🧣",
     image_url: "/images/8.jpg",
     details: {
       materiais: "Fio 100% algodão, fechamento em botão forrado",
@@ -150,7 +141,6 @@ export const exemplares = [
     description: "Bolsa de crochê estilo cesta com alça em couro. Ideal para o dia a dia.",
     price: 74.90,
     category: "Acessórios",
-    emoji: "👜",
     image_url: "/images/9.jpg",
     details: {
       materiais: "Fio de algodão reciclado, alça em couro sintético, forro interno",

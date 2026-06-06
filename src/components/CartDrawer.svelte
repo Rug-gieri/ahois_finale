@@ -153,9 +153,7 @@
       <div class="flex flex-col gap-4">
         {#each cart.items as item (item.product.id)}
           <div class="flex items-center gap-4 bg-bege/30 rounded-lg p-3">
-            <div class="w-12 h-12 rounded-lg bg-bege flex items-center justify-center text-2xl shrink-0">
-              {item.product.emoji}
-            </div>
+            <img src={item.product.image_url} alt={item.product.name} class="w-12 h-12 rounded-lg object-cover shrink-0" />
             <div class="flex-1 min-w-0">
               <p class="font-semibold text-marrom-escuro text-sm truncate">{item.product.name}</p>
               <p class="text-xs text-marrom-claro/60">R$ {item.product.price.toFixed(2)}</p>

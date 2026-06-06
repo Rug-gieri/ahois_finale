@@ -8,14 +8,13 @@ CREATE TABLE produtos (
   description TEXT,
   price DECIMAL(10,2) NOT NULL,
   category TEXT NOT NULL,
-  emoji TEXT DEFAULT '🧶',
   details JSONB DEFAULT jsonb_build_object(
     'materiais', '',
     'tamanho', '',
     'cores', '[]'::jsonb,
     'cuidados', ''
   ),
-  image_url TEXT,
+  image_url TEXT NOT NULL,
   active BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()

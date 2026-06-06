@@ -14,7 +14,7 @@
   let form = $state(null)
   let editando = $state(null)
 
-  let fp = $state({ name: '', description: '', price: '', category: '', emoji: '🧶', image_url: '', materiais: '', tamanho: '', cores: '', cuidados: '', active: true })
+  let fp = $state({ name: '', description: '', price: '', category: '', image_url: '', materiais: '', tamanho: '', cores: '', cuidados: '', active: true })
   let fe = $state({ nome: '', tipo: 'oficina', logradouro: '', cidade: '', estado: '', cep: '', mapa_url: '' })
   let salvando = $state(false)
   let enviandoFoto = $state(false)
@@ -65,7 +65,7 @@
   }
 
   function resetFormProduto() {
-    fp = { name: '', description: '', price: '', category: '', emoji: '🧶', image_url: '', materiais: '', tamanho: '', cores: '', cuidados: '', active: true }
+    fp = { name: '', description: '', price: '', category: '', image_url: '', materiais: '', tamanho: '', cores: '', cuidados: '', active: true }
   }
 
   function resetFormEndereco() {
@@ -85,7 +85,6 @@
       description: p.description ?? '',
       price: String(p.price),
       category: p.category,
-      emoji: p.emoji,
       image_url: p.image_url ?? '',
       materiais: p.details?.materiais ?? '',
       tamanho: p.details?.tamanho ?? '',
@@ -103,7 +102,6 @@
       description: fp.description || null,
       price: parseFloat(fp.price),
       category: fp.category,
-      emoji: fp.emoji,
       image_url: fp.image_url || null,
       details: {
         materiais: fp.materiais,
@@ -299,7 +297,6 @@
             <input bind:value={fp.name} placeholder="Nome" required class="px-3 py-2 rounded-lg border border-bege bg-branco text-sm focus:outline-none focus:border-marrom-claro" />
             <input bind:value={fp.category} placeholder="Categoria" required class="px-3 py-2 rounded-lg border border-bege bg-branco text-sm focus:outline-none focus:border-marrom-claro" />
             <input bind:value={fp.price} type="number" step="0.01" placeholder="Preço" required class="px-3 py-2 rounded-lg border border-bege bg-branco text-sm focus:outline-none focus:border-marrom-claro" />
-            <input bind:value={fp.emoji} placeholder="Emoji" class="px-3 py-2 rounded-lg border border-bege bg-branco text-sm focus:outline-none focus:border-marrom-claro" />
             <label class="flex items-center gap-2 px-3 py-2 rounded-lg border border-bege bg-branco text-sm cursor-pointer">
               <input type="checkbox" bind:checked={fp.active} class="accent-marrom-escuro" />
               Produto ativo
@@ -356,11 +353,7 @@
             {#each produtos as p}
               <tr class="border-t border-bege/20 hover:bg-bege/10 transition-colors">
                 <td class="px-4 py-3">
-                  {#if p.image_url}
-                    <img src={p.image_url} alt="" class="w-10 h-10 rounded-lg object-cover" />
-                  {:else}
-                    <span class="text-2xl">{p.emoji}</span>
-                  {/if}
+                  <img src={p.image_url} alt="" class="w-10 h-10 rounded-lg object-cover" />
                 </td>
                 <td class="px-4 py-3 font-medium">{p.name}</td>
                 <td class="px-4 py-3 text-marrom-claro/70">{p.category}</td>

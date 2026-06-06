@@ -16,9 +16,8 @@ function toProduct(row: ProdutoDB): Product {
     description: row.description ?? '',
     price: row.price,
     category: row.category,
-    emoji: row.emoji,
     details: row.details ?? defaultDetails,
-    image_url: row.image_url ?? undefined,
+    image_url: row.image_url,
   }
 }
 
