@@ -68,14 +68,18 @@
   >
     <a
       href="#"
-      class={`flex-shrink-0 transition-all duration-500 ${menuOpen ? 'invert' : ''}`}
+      class={`flex-shrink-0 flex items-center gap-2 transition-all duration-500`}
       aria-label="Ateliê Ahois - Início"
     >
       <img
-        src="/images/footer_logo.png"
-        alt="Ateliê Ahois"
-        class="h-8 w-auto brightness-0"
+        src="/images/wale_logo.png"
+        alt="Ahois"
+        class="h-8 w-auto"
       />
+      <span class="font-marmelad leading-tight text-right" class:invert={menuOpen}>
+        <span class="block text-sm font-bold">Ahois</span>
+        <span class="block text-[10px] -mt-0.5">Ateliê</span>
+      </span>
     </a>
 
     <button
@@ -141,14 +145,18 @@
 >
   <div class="flex items-center justify-between">
     <!-- Logo pill -->
-    <div class="relative rounded-3xl px-8 py-5">
+    <div class="relative rounded-3xl px-7 py-4">
       <div class="absolute inset-0 rounded-3xl bg-white/50 backdrop-blur-sm border border-white/10 shadow-lg transition-opacity duration-500 {scrolled ? 'opacity-100' : 'opacity-0'}" />
-      <a href="#" aria-label="Ateliê Ahois - Início" class="relative block">
+      <a href="#" aria-label="Ateliê Ahois - Início" class="relative flex items-center gap-3">
         <img
-          src="/images/footer_logo.png"
-          alt="Ateliê Ahois"
-          class="h-11 w-auto brightness-0"
+          src="/images/wale_logo.png"
+          alt="Ahois"
+          class="h-11 w-auto"
         />
+        <span class="font-marmelad leading-tight text-marrom-escuro text-right">
+          <span class="block text-lg font-bold">Ahois</span>
+          <span class="block text-xs -mt-0.5">Ateliê</span>
+        </span>
       </a>
     </div>
 
