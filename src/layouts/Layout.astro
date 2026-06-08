@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css'
+import CookieBanner from '../components/CookieBanner.svelte'
+import ScrollToTop from '../components/ScrollToTop.svelte'
 
 interface Props {
   title?: string
@@ -61,5 +63,7 @@ interface Props {
   </head>
   <body class="bg-branco text-marrom-escuro">
     <slot />
+    <CookieBanner client:load />
+    <ScrollToTop client:load />
   </body>
 </html>
